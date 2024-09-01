@@ -4,6 +4,7 @@ import (
 	"log/slog"
 
 	"github.com/marcelofabianov/vita-assist/identity/config"
+	"github.com/marcelofabianov/vita-assist/identity/internal/core/contract"
 	"github.com/marcelofabianov/vita-assist/identity/pkg/logger"
 )
 
@@ -24,9 +25,10 @@ func main() {
 	}
 	defer app.logger.Close()
 
-	app.logger.Info("Starting the identity",
-		app.logger.String("status", "running"),
-		app.logger.String("env", app.config.ENV),
+	app.logger.Info(
+		contract.MainContext,
+		"Starting the "+app.config.Name,
+		nil,
 	)
 }
 
@@ -41,7 +43,7 @@ func build() (*App, error) {
 		slog.String("ENV", cfg.ENV),
 	)
 
-	logger, err := logger.NewLogger(cfg.Log)
+	logger, err := logger.NewLogger(cfg)
 	if err != nil {
 		slog.Error("Failed to create logger",
 			slog.String("error", err.Error()),
