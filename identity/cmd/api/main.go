@@ -4,10 +4,16 @@ import (
 	"log/slog"
 
 	"github.com/marcelofabianov/vita-assist/identity/config"
+	"github.com/marcelofabianov/vita-assist/identity/pkg/logger"
 )
 
+type App struct {
+	cfg    *config.Config
+	logger *logger.Logger
+}
+
 func main() {
-	cfg, err := run()
+	app, err := run()
 
 	if err != nil {
 		slog.Error("Failed to start the identity gateway",
@@ -16,14 +22,12 @@ func main() {
 		)
 		return
 	}
+	defer app.logger.Close()
 
-	slog.Info("Identity gateway is running",
-		slog.String("ID", cfg.ID),
-		slog.String("status", "running"),
-	)
+	app.logger.Info("Starting the identity gateway", app.logger.String("status", "running"))
 }
 
-func run() (*config.Config, error) {
+func run() (*App, error) {
 	cfg, err := config.NewConfig()
 	if err != nil {
 		return nil, err
@@ -34,5 +38,14 @@ func run() (*config.Config, error) {
 		slog.String("ENV", cfg.ENV),
 	)
 
-	return cfg, nil
+	logger, err := logger.NewLogger(cfg.Log)
+	if err != nil {
+		slog.Error("Failed to create logger",
+			slog.String("error", err.Error()),
+			slog.String("context", "main function"),
+		)
+		return nil, err
+	}
+
+	return &App{cfg: cfg, logger: logger}, nil
 }

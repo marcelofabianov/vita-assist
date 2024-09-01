@@ -13,6 +13,14 @@ type Config struct {
 	VERSION string
 	ENV     string
 	TZ      string
+	Log     Log
+}
+
+type Log struct {
+	Level    string
+	Format   string
+	Output   string
+	FilePath string
 }
 
 func NewConfig() (*Config, error) {
@@ -21,12 +29,18 @@ func NewConfig() (*Config, error) {
 	}
 
 	cfg := &Config{
-		Project: os.Getenv("PROJECT"),
-		Name:    os.Getenv("NAME"),
-		ID:      os.Getenv("ID"),
-		VERSION: os.Getenv("VERSION"),
-		ENV:     os.Getenv("ENV"),
-		TZ:      os.Getenv("TZ"),
+		Project: os.Getenv("IDE_PROJECT"),
+		Name:    os.Getenv("IDE_NAME"),
+		ID:      os.Getenv("IDE_ID"),
+		VERSION: os.Getenv("IDE_VERSION"),
+		ENV:     os.Getenv("IDE_ENV"),
+		TZ:      os.Getenv("IDE_TZ"),
+		Log: Log{
+			Level:    os.Getenv("IDE_LOG_LEVEL"),
+			Format:   os.Getenv("IDE_LOG_FORMAT"),
+			Output:   os.Getenv("IDE_LOG_OUTPUT"),
+			FilePath: os.Getenv("IDE_LOG_FILE_PATH"),
+		},
 	}
 
 	return cfg, nil
