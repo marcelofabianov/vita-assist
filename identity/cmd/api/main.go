@@ -3,7 +3,7 @@ package main
 import (
 	"log/slog"
 
-	"github.com/marcelofabianov/vita-assist/identity-gateway/config"
+	"github.com/marcelofabianov/vita-assist/identity/config"
 )
 
 func main() {
