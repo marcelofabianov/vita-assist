@@ -8,7 +8,7 @@ import (
 )
 
 type App struct {
-	cfg    *config.Config
+	config *config.Config
 	logger *logger.Logger
 }
 
@@ -16,7 +16,7 @@ func main() {
 	app, err := run()
 
 	if err != nil {
-		slog.Error("Failed to start the identity gateway",
+		slog.Error("Failed to start the identity",
 			slog.String("error", err.Error()),
 			slog.String("context", "main function"),
 		)
@@ -24,7 +24,10 @@ func main() {
 	}
 	defer app.logger.Close()
 
-	app.logger.Info("Starting the identity gateway", app.logger.String("status", "running"))
+	app.logger.Info("Starting the identity",
+		app.logger.String("status", "running"),
+		app.logger.String("env", app.config.ENV),
+	)
 }
 
 func run() (*App, error) {
@@ -47,5 +50,5 @@ func run() (*App, error) {
 		return nil, err
 	}
 
-	return &App{cfg: cfg, logger: logger}, nil
+	return &App{config: cfg, logger: logger}, nil
 }
