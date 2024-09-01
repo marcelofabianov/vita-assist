@@ -13,7 +13,7 @@ type App struct {
 }
 
 func main() {
-	app, err := run()
+	app, err := build()
 
 	if err != nil {
 		slog.Error("Failed to start the identity",
@@ -30,7 +30,7 @@ func main() {
 	)
 }
 
-func run() (*App, error) {
+func build() (*App, error) {
 	cfg, err := config.NewConfig()
 	if err != nil {
 		return nil, err
